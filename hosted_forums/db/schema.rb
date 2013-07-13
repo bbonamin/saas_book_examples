@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130629021502) do
+ActiveRecord::Schema.define(:version => 20130710092350) do
 
   create_table "forem_categories", :force => true do |t|
     t.string   "name",       :null => false
@@ -117,10 +117,12 @@ ActiveRecord::Schema.define(:version => 20130629021502) do
 
   create_table "subscribem_accounts", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.integer  "owner_id"
     t.string   "subdomain"
+    t.integer  "plan_id"
+    t.string   "braintree_subscription_id"
   end
 
   add_index "subscribem_accounts", ["subdomain"], :name => "index_subscribem_accounts_on_subdomain"
@@ -130,6 +132,14 @@ ActiveRecord::Schema.define(:version => 20130629021502) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "subscribem_plans", :force => true do |t|
+    t.string   "name"
+    t.string   "braintree_id"
+    t.float    "price"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "subscribem_users", :force => true do |t|
