@@ -8,7 +8,7 @@ module Subscribem
     end
 
     def create
-      @account = Subscribem::Account.create_with_owner(params[:account])
+      @account = Subscribem::Account.create_with_owner(account_params)
       if @account.valid?
         force_authentication!(@account.owner)
         @account.create_schema
@@ -19,5 +19,12 @@ module Subscribem
         render :new
       end
     end
+
+    private
+      def account_params
+        params.require(:account).permit(:name, :subdomain, {:owner_attributes => [
+          :email, :password, :password_confirmation
+        ]})
+      end 
   end
 end

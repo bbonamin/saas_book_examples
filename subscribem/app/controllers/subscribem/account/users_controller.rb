@@ -7,11 +7,21 @@ module Subscribem
     end
 
     def create
-      account = Subscribem::Account.find_by_subdomain!(request.subdomain)
-      user = account.users.create(params[:user])
-      force_authentication!(user)
-      flash[:success] = "You have signed up successfully."
-      redirect_to root_path
+      account = Account.find_by_subdomain!(request.subdomain)
+      user = account.users.new(user_params)
+      if user.save
+        force_authentication!(user)
+        flash[:success] = 'You have signed up successfully.'
+        redirect_to root_path
+      else
+        flash[:error] = 'Sorry, your user account could not be created.'
+        render :new
+      end
     end
+
+    private
+      def user_params
+        params.require(:user).permit(:email, :password, :password_confirmation)
+      end
   end
 end
